@@ -15,6 +15,24 @@
   width: 400px;
 }
 
+.tops {
+  background-color: #d9f4fc;
+  height: 100vh;
+}
+
+.heroD {
+  position: relative;
+  height: 300px;
+}
+.heroD .card {
+  box-shadow: 10px 10px gray;
+  transition: transform 0.3s ease-in-out;
+}
+.heroD .card:hover {
+  transform: scale(1.1);
+  box-shadow: 10px 10px rgb(71, 218, 169);
+}
+
 .top {
   background-color: #d9f4fc;
 }

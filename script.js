@@ -8,6 +8,7 @@ function fetchData(url, callback) {
     .then(response => response.json())
     .then(json => {
         callback(json);
+        console.log(json);
     })
     .catch(error => console.log(error));
 }
@@ -16,7 +17,8 @@ function firstFunction() {
     fetchData("https://striveschool-api.herokuapp.com/api/product/", json => {
         console.table(json);
         showData(json);
-        
+        dettaglio(json);
+
     });
 }
 
@@ -29,24 +31,77 @@ function secondFunction() {
 firstFunction();
 secondFunction();
 
+function dettaglio(data) {
+    const cardz = document.querySelectorAll(".carta");
+  
+    cardz.forEach((el, index) => {
+      el.addEventListener("click", function() {
+        let dato = data[index];
+
+        let obj = JSON.stringify(dato);
+  
+        // Aggiungi il parametro 'dato' all'URL e reindirizza l'utente
+        window.location.href = `dettaglio.html?dato=${encodeURIComponent(obj)}`;
+      });
+    });
+  }
+
+
 document.addEventListener('DOMContentLoaded', () => {
-
     
-const info = document.querySelector(".infos");
-info.addEventListener("click", function(){
-    window.location.href = "dettaglio.html";
-    console.log("okok");
-})
 
+    // Ottieni i parametri di query dalla URL
+  const urlParams = new URLSearchParams(window.location.search);
+
+  // Controlla se il parametro 'dato' è presente
+  if (urlParams.has('dato')) {
+    // Recupera il valore del parametro 'dato'
+    const obj = urlParams.get('dato');
+
+    const dato = JSON.parse(obj);
+
+    // Fai qualcosa con il dato, ad esempio, lo puoi visualizzare nell'HTML
+    const contenitore = document.querySelector(".cardzz");
+    let div = document.createElement("div");
+
+    div.innerHTML = 
+        
+    `
+    <div class="card mb-3" style="max-width: 540px;">
+    <div class="row g-0">
+      <div class="col-md-4 text-center">
+        <img src="${dato.imageUrl}" class="img-fluid rounded-start" alt="...">
+      </div>
+      <div class="col-md-8">
+        <div class="card-body">
+          <h5 class="card-title">${dato.name}</h5>
+          <p class="card-text">${dato.description}</p>
+          <p class="card-text"><small class="text-body-secondary">$${dato.price}</small></p>
+          <p class="card-text"><small class="text-body-secondary">${dato.brand}</small></p>
+          <p class="card-text"><small class="text-body-secondary">${dato._id}</small></p>
+        </div>
+      </div>
+    </div>
+  </div>
+
+
+
+    `
+
+
+
+    contenitore.appendChild(div);
+    
+    
+  }
+    
 
     const links = document.querySelectorAll(".back");
     links.forEach(el => el.addEventListener("click", function() {
-
-        console.log("we");
         window.location.href = "index.html";
     }))
 
-    
+ 
 
     const addBtn = document.querySelector(".addBtn");
     addBtn.addEventListener("click", addProd);
@@ -56,24 +111,13 @@ info.addEventListener("click", function(){
     const resetBtn = document.querySelector(".resetBtn");
     resetBtn.addEventListener("click", resetInput);
 
-    
-    
-    
+
     
 
     // const delBtn = document.querySelector(".delBtn");
     // delBtn.addEventListener("click", delProd);
 
-
-    
-    
-    
-
 });
-
-
-
-
 
 
 
@@ -98,7 +142,48 @@ function showData(data){
                   <p class="card-text"><small class="text-body-info">$${data[i].price}</small></p>
                   <div class="icone">
                   <i class="bi bi-pencil-square  px-1 border rounded fs-5"></i>
-                  <a href="dettaglio.html"><i class="bi bi-info-circle  p-1 border rounded fs-5 infos"></i></a>
+                  <a href="#"><i class="bi bi-info-circle  p-1 border rounded fs-5 infos"></i></a>
+                  
+                  </div>
+                </div>
+            </div>
+
+        
+        `
+        cards.appendChild(card);
+    }
+ 
+}
+
+
+
+function showDettagli(data){
+
+    const bottone = document.querySelector(".infos");
+    const cards = document.querySelector(".cardzz");
+
+    bottone.addEventListener("click", function(e){
+        console.log(e.target);
+    })
+    
+    for(let i = 0; i < data.length; i++){
+
+        let card = document.createElement("div");
+        card.classList.add("carta");
+        card.innerHTML = 
+        `
+  
+            
+        <div class="elemento d-flex">
+                <div class="img">
+                    <img src="${data[i].imageUrl}" class="bd-placeholder-img card-img-top" alt="" width="150" height="100">
+                </div>
+                <div class="corpo p-3">
+                  <h6 class="card-title fw-bold">${data[i].name}</h6>
+                  <p class="card-text"><small class="text-body-info">$${data[i].price}</small></p>
+                  <div class="icone">
+                  <i class="bi bi-pencil-square  px-1 border rounded fs-5"></i>
+                  <a href="#"><i class="bi bi-info-circle  p-1 border rounded fs-5 infos"></i></a>
                   
                   </div>
                 </div>
@@ -155,17 +240,18 @@ function elenco(data) {
             const description = trElement.querySelector("td:nth-child(6)").textContent;
             const imageUrl = trElement.querySelector("td:nth-child(7)").textContent;
             
+        
 
             // Popola i campi di input della modale con i dati estratti
-            document.querySelector("#idProd").value = id;
-            document.querySelector("#nomeProd").value = name;
-            document.querySelector("#brandProd").value = brand;
-            document.querySelector("#prezzoProd").value = price;
-            document.querySelector("#descProd").value = description;
-            document.querySelector("#imgProd").value = imageUrl;
+            document.querySelector(".idProd").value = id;
+            document.querySelector(".nomeProd").value = name;
+            document.querySelector(".brandProd").value = brand;
+            document.querySelector(".prezzoProd").value = price;
+            document.querySelector(".descProd").value = description;
+            document.querySelector(".imgProd").value = imageUrl;
 
 
-          
+
             
         });
     });
@@ -185,7 +271,7 @@ document.getElementById('exampleModal').addEventListener('shown.bs.modal', funct
 }
 
 
-    function addProd(){
+function addProd(){
 
         const nome = document.querySelector("#nomeProd").value;
 
@@ -227,13 +313,12 @@ document.getElementById('exampleModal').addEventListener('shown.bs.modal', funct
       
 function editProd(){
 
-    const nome = document.querySelector("#nomeProd").value;
-        
-        const descrizione = document.querySelector("#descProd").value;
-        const brand = document.querySelector("#brandProd").value;
-        const img = document.querySelector("#imgProd").value;
-        const prezzo = document.querySelector("#prezzoProd").value;
-        const id = document.querySelector("#idProd").value;
+    const nome = document.querySelector(".nomeProd").value;
+    const descrizione = document.querySelector(".descProd").value;
+    const brand = document.querySelector(".brandProd").value;
+    const img = document.querySelector(".imgProd").value;
+    const prezzo = document.querySelector(".prezzoProd").value;
+    const id = document.querySelector(".idProd").value;
 
 
     fetch(`https://striveschool-api.herokuapp.com/api/product/${id}`, {
@@ -271,9 +356,6 @@ function delProd(){
 function resetInput(){
 
     const inputs = document.querySelectorAll(".form-control");
-   
-
-
     inputs.forEach((input) => {
         input.value = "";
     })
