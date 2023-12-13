@@ -34,11 +34,13 @@ document.addEventListener('DOMContentLoaded', () => {
     
     const addBtn = document.querySelector(".addBtn");
     addBtn.addEventListener("click", addProd);
-    const editBtn = document.querySelector(".editBtn");
-    editBtn.addEventListener("click", editProd);
+    
 
     const delBtn = document.querySelector(".delBtn");
     delBtn.addEventListener("click", delProd);
+    const resetBtn = document.querySelector(".resetBtn");
+    resetBtn.addEventListener("click", resetInput);
+
     
     
 });
@@ -47,28 +49,30 @@ document.addEventListener('DOMContentLoaded', () => {
 
 function showData(data){
 
-    const cards = document.querySelector(".cardz");
+    const cards = document.querySelector(".carte");
     
     for(let i = 0; i < data.length; i++){
 
         let card = document.createElement("div");
-        card.classList.add("card");
-        card.style.width = "18rem";
+        card.classList.add("carta");
         card.innerHTML = 
         `
-            <img src="${data[i].imageUrl}" class="card-img-top" alt="...">
-            <div class="card-body">
-              <h5 class="card-title">${data[i].name}</h5>
-              <p class="card-text">${data[i].description}</p>
+  
+            
+        <div class="elemento d-flex">
+                <div class="img">
+                    <img src="${data[i].imageUrl}" class="bd-placeholder-img card-img-top" alt="" width="150" height="100">
+                </div>
+                <div class="corpo p-3">
+                  <h6 class="card-title fw-bold">${data[i].name}</h6>
+                  <p class="card-text"><small class="text-body-info">$${data[i].price}</small></p>
+                  <div class="icone">
+                  <i class="bi bi-pencil-square  px-1 border rounded fs-5"></i>
+                  <i class="bi bi-info-circle  px-1 border rounded fs-5"></i>
+                  </div>
+                </div>
             </div>
-            <ul class="list-group list-group-flush">
-              <li class="list-group-item">${data[i].brand}</li>
-              <li class="list-group-item">${data[i].price} $</li>
-            </ul>
-            <div class="card-body">
-              <a href="#" class="card-link">Card link</a>
-              <a href="#" class="card-link">Another link</a>
-            </div>
+
         
         `
         cards.appendChild(card);
@@ -77,28 +81,78 @@ function showData(data){
 }
     
 
-function elenco(data){
-
-    
+function elenco(data) {
     const tabella = document.querySelector(".tbody");
 
-    for(let i = 0; i < data.length; i++){
-        
+    for (let i = 0; i < data.length; i++) {
         const elenco = document.createElement("tr");
-        elenco.innerHTML = 
-    `
-                        <th scope="row">1</th>
-                        <td>${data[i]._id}</td>
-                        <td>${data[i].name}</td>
-                        <td>${data[i].price}</td>
-    `
-
-    tabella.appendChild(elenco);
-
+        elenco.innerHTML = `
+            <td scope="row">${i + 1}</td>
+            <td>${data[i]._id}</td>
+            <td>${data[i].name}</td>
+            <td>${data[i].brand}</td>
+            <td>${data[i].price}</td>
+            <td class="d-none">${data[i].description}</td>
+            <td class="d-none">${data[i].imageUrl}</td>
+            <td>
+                <button type="button" class="modifica" 
+                    data-bs-toggle="modal" 
+                    data-bs-target="#exampleModal"
+                    data-id="${data[i]._id}"
+                    data-name="${data[i].name}"
+                    data-brand="${data[i].brand}"
+                    data-price="${data[i].price}"
+                    data-description="${data[i].description}"
+                    data-imageUrl="${data[i].imageUrl}"
+                >
+                    <i class="bi bi-pencil-square" type="button" data-bs-target="#exampleModal"></i>
+                </button>
+                <i class="bi bi-x-square"></i>
+            </td>
+        `;
+        tabella.appendChild(elenco);
     }
-    
+
+    const modificaButtons = document.querySelectorAll(".modifica");
+    modificaButtons.forEach((mod) => {
+        mod.addEventListener("click", (e) => {
+            const trElement = e.target.closest("tr");
+            const id = trElement.querySelector("td:nth-child(2)").textContent;
+            const name = trElement.querySelector("td:nth-child(3)").textContent;
+            const brand = trElement.querySelector("td:nth-child(4)").textContent;
+            const price = trElement.querySelector("td:nth-child(5)").textContent;
+            const description = trElement.querySelector("td:nth-child(6)").textContent;
+            const imageUrl = trElement.querySelector("td:nth-child(7)").textContent;
+            
+
+            // Popola i campi di input della modale con i dati estratti
+            document.querySelector("#idProd").value = id;
+            document.querySelector("#nomeProd").value = name;
+            document.querySelector("#brandProd").value = brand;
+            document.querySelector("#prezzoProd").value = price;
+            document.querySelector("#descProd").value = description;
+            document.querySelector("#imgProd").value = imageUrl;
+
+
+          
+            
+        });
+    });
+
+// Aggiungi un gestore di eventi per l'evento shown.bs.modal
+document.getElementById('exampleModal').addEventListener('shown.bs.modal', function () {
+    // Seleziona il bottone all'interno della modale quando è aperta
+    const modalButton = document.querySelector('.salva');
+
+    // Ora puoi eseguire le operazioni desiderate con il bottone
+    // ad esempio, aggiungere un gestore di eventi
+    modalButton.addEventListener('click', editProd); 
+        
+    })
+
+
 }
-    
+
 
     function addProd(){
 
@@ -162,7 +216,7 @@ function editProd(){
     "Authorization": "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJfaWQiOiI2NTc4NDI3OWMwNTgzNTAwMTg1MjMxOWQiLCJpYXQiOjE3MDIzODAxNTMsImV4cCI6MTcwMzU4OTc1M30.-ZyXsx7p7y0c2Ww3K9fLdtNmZu2BAVCGGJo2T-N1Vlg"// il tipo del contenuto che sto inviando
   },
 });
-}
+} 
 
 
 function delProd(){
@@ -178,3 +232,18 @@ function delProd(){
       });
 }
       
+
+function resetInput(){
+
+    const inputs = document.querySelectorAll(".form-control");
+    const nome = document.querySelector("#nomeProd").value;  
+    const descrizione = document.querySelector("#descProd").value;
+    const brand = document.querySelector("#brandProd").value;        const img = document.querySelector("#imgProd").value;
+    const prezzo = document.querySelector("#prezzoProd").value;
+    const id = document.querySelector("#idProd").value;
+
+
+    inputs.forEach((input) => {
+        input.value = "";
+    })
+}
