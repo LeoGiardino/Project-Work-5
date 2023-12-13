@@ -3,6 +3,18 @@
   cursor: pointer;
 }
 
+.hero {
+  position: relative;
+  height: 300px;
+}
+.hero img {
+  position: absolute;
+  bottom: 0;
+  right: 5%;
+  height: 100%;
+  width: 400px;
+}
+
 .top {
   background-color: #d9f4fc;
 }
@@ -47,6 +59,9 @@
 .carte .carta .icone .bi-info-circle {
   margin-right: 5px;
   background-color: bisque;
+  cursor: pointer;
+  text-decoration: none;
+  color: black;
 }
 .carte .carta:hover {
   transform: scale(1.1);

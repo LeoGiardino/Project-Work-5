@@ -4,6 +4,19 @@
     cursor: pointer;
 }
 
+.hero{
+    position: relative;
+    height: 300px;
+
+    img {
+        position: absolute;
+        bottom: 0;
+        right: 5%;
+        height: 100%;
+        width: 400px;
+    }
+}
+
 .top {
     background-color: #d9f4fc;
 }
@@ -53,6 +66,9 @@
             .bi-info-circle {
                 margin-right: 5px;
                 background-color: bisque;
+                cursor: pointer;
+                text-decoration: none;
+                color: black;
             }
         }
 
@@ -83,13 +99,5 @@
     font-family: sans-serif;
     min-width: 400px;
     box-shadow: 0 0 20px rgba(0, 0, 0, 0.15);
-
-   
-  
-
-    
-   
-   
-
    
 }

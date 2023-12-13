@@ -28,22 +28,52 @@ function secondFunction() {
 }
 firstFunction();
 secondFunction();
-    
+
 document.addEventListener('DOMContentLoaded', () => {
+
     
+const info = document.querySelector(".infos");
+info.addEventListener("click", function(){
+    window.location.href = "dettaglio.html";
+    console.log("okok");
+})
+
+
+    const links = document.querySelectorAll(".back");
+    links.forEach(el => el.addEventListener("click", function() {
+
+        console.log("we");
+        window.location.href = "index.html";
+    }))
+
     
+
     const addBtn = document.querySelector(".addBtn");
     addBtn.addEventListener("click", addProd);
     
-
-    const delBtn = document.querySelector(".delBtn");
-    delBtn.addEventListener("click", delProd);
+    
+    
     const resetBtn = document.querySelector(".resetBtn");
     resetBtn.addEventListener("click", resetInput);
 
     
     
+    
+    
+
+    // const delBtn = document.querySelector(".delBtn");
+    // delBtn.addEventListener("click", delProd);
+
+
+    
+    
+    
+
 });
+
+
+
+
 
 
 
@@ -68,7 +98,8 @@ function showData(data){
                   <p class="card-text"><small class="text-body-info">$${data[i].price}</small></p>
                   <div class="icone">
                   <i class="bi bi-pencil-square  px-1 border rounded fs-5"></i>
-                  <i class="bi bi-info-circle  px-1 border rounded fs-5"></i>
+                  <a href="dettaglio.html"><i class="bi bi-info-circle  p-1 border rounded fs-5 infos"></i></a>
+                  
                   </div>
                 </div>
             </div>
@@ -157,7 +188,7 @@ document.getElementById('exampleModal').addEventListener('shown.bs.modal', funct
     function addProd(){
 
         const nome = document.querySelector("#nomeProd").value;
-        console.log(nome);
+
         const descrizione = document.querySelector("#descProd").value;
         const brand = document.querySelector("#brandProd").value;
         const img = document.querySelector("#imgProd").value;
@@ -170,7 +201,9 @@ document.getElementById('exampleModal').addEventListener('shown.bs.modal', funct
             brand: `${brand}`,
             imageUrl: `${img}`,
             price: `${prezzo}`
-          };
+        };
+
+          console.log(obj);
 
         fetch("https://striveschool-api.herokuapp.com/api/product", {
     
@@ -186,7 +219,9 @@ document.getElementById('exampleModal').addEventListener('shown.bs.modal', funct
         .then(json => {
     console.log("Risposta del server alla chiamata POST:", json);
 })
-.catch(error => console.error("Errore durante la chiamata POST:", error));
+.catch(error => 
+
+    console.log("errore dettaglio :" , error.response.data));
     }
       
       
@@ -236,11 +271,7 @@ function delProd(){
 function resetInput(){
 
     const inputs = document.querySelectorAll(".form-control");
-    const nome = document.querySelector("#nomeProd").value;  
-    const descrizione = document.querySelector("#descProd").value;
-    const brand = document.querySelector("#brandProd").value;        const img = document.querySelector("#imgProd").value;
-    const prezzo = document.querySelector("#prezzoProd").value;
-    const id = document.querySelector("#idProd").value;
+   
 
 
     inputs.forEach((input) => {
